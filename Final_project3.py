@@ -8,9 +8,11 @@ import os
 working_directory = os.getcwd()
 print(working_directory)
 
-data_folder = '/Users/rwhite/PycharmProjects/final_project/UCDPA_Robert_White/'
+# preparing the path for uploading files
+data_folder = '/Users/rwhite/PycharmProjects/final_project/'
 dataset_names = ['bmw', 'merc', 'hyundi', 'ford', 'vauxhall', 'vw', 'audi', 'skoda', 'toyota']
 
+# Uploading the files, adjusting the naming in the tax column and merging the data together
 df = pd.DataFrame()
 for dataset_name in dataset_names:
     dataset = pd.read_csv(data_folder+dataset_name + '.csv')
@@ -19,6 +21,7 @@ for dataset_name in dataset_names:
     dataset['manufacturer'] = dataset_name
     df = pd.concat([df, dataset], ignore_index=True)
 
+    # viewing the data and understanding it
     print(df.info)
     print(df.describe())
     print(df.isnull().any())
@@ -28,7 +31,7 @@ for dataset_name in dataset_names:
     df.loc[df.year > 2020, 'year'] = 2017
     df.loc[df.year < 1980, 'year'] = 2017
 
-    # Identifying & Removing
+    # Identifying & Removing duplicates
     duplicates = df[df.duplicated(keep=False)]
     print(duplicates.head())
     df.drop_duplicates(ignore_index=True, inplace=True)
@@ -39,7 +42,7 @@ for dataset_name in dataset_names:
     missing_values = df.isnull().sum()
     print(missing_values)
 
-    # fill the missing values with avgerges
+    # fill the missing values with mean averages
     cols = ['tax', 'mpg', 'engineSize']
     for col in cols:
         mean_val = df[col].mean()
@@ -52,12 +55,12 @@ for dataset_name in dataset_names:
         df[col] = col_copy
 print(df.isnull().sum())
 
+# Visualising the data to get an understanding of it
 corr_ = df.corr()
 sns.heatmap(corr_, annot=True)
 plt.show()
 
 # Understanding the data and Grouping and Sorting
-
 model_data = df
 model_data1 = model_data.groupby('model')['model'].count()
 model_data1 = pd.DataFrame(model_data1)
@@ -68,6 +71,7 @@ print(model_data1.head(20))
 model_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.show()
+plt.savefig('Top_Models.png')
 
 year_data = df
 year_data1 = year_data.groupby('year')['model'].count()
@@ -79,6 +83,7 @@ print(year_data1.head(20))
 year_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.show()
+plt.savefig('Top_Year.png')
 
 # Visualising the data
 # 1 Relplot
@@ -89,10 +94,12 @@ sns.relplot(df1['manufacturer'], df1['mpg'], hue=df1['fuelType'], size=df1["engi
             sizes=(40, 400), alpha=.5, palette="muted",
             height=6)
 plt.show()
+plt.savefig('relplot_fueltypes.png')
 
 # 2 Line chart
 sns.lineplot(df1['year'], df1["tax"], hue=df1["fuelType"]).set_title('Tax cost by Fuel Type by Year')
 plt.show()
+plt.savefig('Tax_Fueltype.png')
 
 # 3 Pairplot by Fueltype
 df_pair = df
@@ -100,6 +107,7 @@ df_pair.loc[df_pair.year < 1980, 'year'] = 2017
 sns.set_theme(style="ticks")
 sns.pairplot(df_pair, hue="fuelType")
 plt.show()
+plt.savefig('pairplot_fueltype.png')
 
 # 4 Subplotting and Grouping
 
@@ -133,10 +141,12 @@ total_cars = pd.concat(cars)
 sns.lineplot(total_cars['year'], total_cars['price'],
              hue=total_cars['brandType']).set_title('Price of Premium Cars vs Volume Cars')
 plt.show()
+plt.savefig('premvsvol_pricing.png')
 
 # Boxplot
 sns.boxplot(total_cars['fuelType'], total_cars['mpg'], hue=total_cars['brandType'])
 plt.show()
+plt.savefig('premvsvol_fuelmpg.png')
 
 # Working out total Fuel used in litres
 total_fuel_used = total_cars["mileage"] / total_cars["mpg"]
@@ -159,6 +169,8 @@ print(litre_model_data1.head(20))
 litre_model_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.show()
+plt.savefig('fuellitres_manu.png')
+
 # Fuel types by fuel used
 litre_fuel_data = total_cars
 litre_fuel_data1 = litre_fuel_data.groupby('fuelType')['litresFuelthou'].sum()
@@ -170,6 +182,7 @@ print(litre_fuel_data1.head(20))
 litre_fuel_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.show()
+plt.savefig('fuellitres_fueltype.png')
 
 total_mileage = total_cars.groupby('fuelType')['mileage'].sum()
 print(total_mileage)
