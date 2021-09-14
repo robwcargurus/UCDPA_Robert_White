@@ -9,7 +9,7 @@ working_directory = os.getcwd()
 print(working_directory)
 
 # preparing the path for uploading files
-data_folder = '/Users/rwhite/PycharmProjects/final_project/'
+data_folder = '/Users/rwhite/PycharmProjects/final_project/UCDPA_Robert_White/'
 dataset_names = ['bmw', 'merc', 'hyundi', 'ford', 'vauxhall', 'vw', 'audi', 'skoda', 'toyota']
 
 # Uploading the files, adjusting the naming in the tax column and merging the data together
@@ -59,6 +59,7 @@ print(df.isnull().sum())
 corr_ = df.corr()
 sns.heatmap(corr_, annot=True)
 plt.show()
+plt.savefig('Heatmap.png')
 
 # Understanding the data and Grouping and Sorting
 model_data = df
