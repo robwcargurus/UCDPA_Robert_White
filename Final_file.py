@@ -159,7 +159,7 @@ total_cars["litresFuelthou"] = total_fuel_litres1
 print(total_cars)
 
 
-# Top 10 models by litres of fuel used
+# Top 10 manufacturers by litres of fuel used vs total number of cars
 litre_model_data = total_cars
 litre_model_data1 = litre_model_data.groupby('manufacturer')['litresFuelthou'].sum()
 litre_model_data1 = pd.DataFrame(litre_model_data1)
@@ -170,6 +170,18 @@ print(litre_model_data1.head(20))
 litre_model_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.savefig("fuellitres_manu.png")
+plt.show()
+
+manu_data = total_cars
+manu_data1 = manu_data.groupby('manufacturer')['manufacturer'].count()
+manu_data1 = pd.DataFrame(manu_data1)
+manu_data1.columns = ['Number of cars by Manufacturer']
+manu_data1.sort_values(by=['Number of cars by Manufacturer'], inplace=True, ascending=False)
+manu_data1 = manu_data1.head(10)
+print(manu_data1.head(20))
+manu_data1.plot.bar()
+plt.xticks(rotation=30)
+plt.savefig("manu_count.png")
 plt.show()
 
 # Fuel types by fuel used
