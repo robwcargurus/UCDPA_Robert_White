@@ -186,4 +186,11 @@ plt.savefig("fuellitres_fueltype.png")
 plt.show()
 
 total_mileage = total_cars.groupby('fuelType')['mileage'].sum()
-print(total_mileage)
+total_mileage1 = pd.DataFrame(total_mileage)
+total_mileage1.columns = ['Total Mileage']
+total_mileage1.sort_values(by=['Total Mileage'], inplace=True, ascending=False)
+total_mileage1.plot.bar()
+plt.xticks(rotation=30)
+plt.savefig("mileage_fueltype.png")
+plt.show()
+print(total_mileage1)
