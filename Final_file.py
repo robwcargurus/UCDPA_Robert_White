@@ -10,13 +10,13 @@ print(working_directory)
 
 # preparing the path for uploading files
 data_folder = '/Users/rwhite/PycharmProjects/final_project/UCDPA_Robert_White/'
-dataset_names = ['bmw', 'merc', 'hyundi', 'ford', 'vauxhall', 'vw', 'audi', 'skoda', 'toyota']
+dataset_names = ['bmw', 'merc', 'hyundai', 'ford', 'vauxhall', 'vw', 'audi', 'skoda', 'toyota']
 
 # Uploading the files, adjusting the naming in the tax column and merging the data together
 df = pd.DataFrame()
 for dataset_name in dataset_names:
     dataset = pd.read_csv(data_folder+dataset_name + '.csv')
-    if (dataset_name == 'hyundi'):
+    if (dataset_name == 'hyundai'):
         dataset.rename(columns={"tax(£)": "tax"}, inplace=True)
     dataset['manufacturer'] = dataset_name
     df = pd.concat([df, dataset], ignore_index=True)
@@ -62,6 +62,18 @@ plt.savefig("Heatmap.png")
 plt.show()
 
 # Understanding the data and Grouping and Sorting
+manufacturer_data = df
+manufacturer_data1 = manufacturer_data.groupby('manufacturer')['manufacturer'].count()
+manufacturer_data1 = pd.DataFrame(manufacturer_data1)
+manufacturer_data1.columns = ['Buys']
+manufacturer_data1.sort_values(by=['Buys'], inplace=True, ascending=False)
+manufacturer_data1 = manufacturer_data1.head(10)
+print(manufacturer_data1.head(20))
+manufacturer_data1.plot.bar()
+plt.xticks(rotation=30)
+plt.savefig("Top_Makes.png")
+plt.show()
+
 model_data = df
 model_data1 = model_data.groupby('model')['model'].count()
 model_data1 = pd.DataFrame(model_data1)
@@ -73,6 +85,7 @@ model_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.savefig("Top_Models.png")
 plt.show()
+
 
 year_data = df
 year_data1 = year_data.groupby('year')['model'].count()
@@ -102,6 +115,13 @@ sns.lineplot(df1['year'], df1["tax"], hue=df1["fuelType"]).set_title('Tax cost b
 plt.savefig("Tax_Fueltype.png")
 plt.show()
 
+sns.lineplot(df1['year'], df1["engineSize"], hue=df1["fuelType"]).set_title('Engine size by Fuel Type by Year')
+plt.savefig("Fuel_Enginesize.png")
+plt.show()
+
+sns.lineplot(df1['year'], df1["mpg"], hue=df1["fuelType"]).set_title('MPG by Fuel Type by Year')
+plt.savefig("MPG_fueltype.png")
+plt.show()
 # 3 Pairplot by Fueltype
 df_pair = df
 df_pair.loc[df_pair.year < 1980, 'year'] = 2017
@@ -117,7 +137,7 @@ audi = df[df['manufacturer'] == "audi"]
 bmw = df[df['manufacturer'] == "bmw"]
 merc = df[df['manufacturer'] == "merc"]
 merc.loc[merc.year < 1980, 'year'] = 2017
-hyundi = df[df['manufacturer'] == "hyundi"]
+hyundi = df[df['manufacturer'] == "hyundai"]
 ford = df[df['manufacturer'] == "ford"]
 vauxhall = df[df['manufacturer'] == "vauxhall"]
 vw = df[df['manufacturer'] == "vw"]
@@ -170,18 +190,6 @@ print(litre_model_data1.head(20))
 litre_model_data1.plot.bar()
 plt.xticks(rotation=30)
 plt.savefig("fuellitres_manu.png")
-plt.show()
-
-manu_data = total_cars
-manu_data1 = manu_data.groupby('manufacturer')['manufacturer'].count()
-manu_data1 = pd.DataFrame(manu_data1)
-manu_data1.columns = ['Number of cars by Manufacturer']
-manu_data1.sort_values(by=['Number of cars by Manufacturer'], inplace=True, ascending=False)
-manu_data1 = manu_data1.head(10)
-print(manu_data1.head(20))
-manu_data1.plot.bar()
-plt.xticks(rotation=30)
-plt.savefig("manu_count.png")
 plt.show()
 
 # Fuel types by fuel used
