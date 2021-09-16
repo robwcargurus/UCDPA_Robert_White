@@ -159,9 +159,9 @@ print(volume_cars.describe())
 cars = [premium_cars, volume_cars]
 total_cars = pd.concat(cars)
 
-sns.lineplot(total_cars['year'], total_cars['price'],
-             hue=total_cars['brandType']).set_title('Price of Premium Cars vs Volume Cars')
-plt.savefig("premvsvol_pricing.png")
+sns.lineplot(total_cars['year'], total_cars['mpg'],
+             hue=total_cars['brandType']).set_title('MPG of Premium Cars vs Volume Cars')
+plt.savefig("premvsvol_mpg.png")
 plt.show()
 
 # Boxplot
